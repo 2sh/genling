@@ -10,8 +10,8 @@
 		<script type='text/javascript' src='script/genling.js'></script>
 		
 		<script>window.genlingLanguages = []</script>
-		<script type='text/javascript' src='languages/mafukagya.js'></script>
-		<script type='text/javascript' src='languages/Japanese.js'></script>
+
+		<script type='text/javascript' src='languages/japanese.js'></script>
 		<script type='text/javascript' src='languages/conlang.js'></script>
 		
 		<script type='text/javascript' src='script/main.js'></script>
@@ -21,14 +21,13 @@
 			<select id='select-language'></select>
 		</div>
 		<div>
-			<select id='select-mode'></select>
+			<select id='select-script'></select>
 			<input type='number' id='text-amount'
 				value='20' min='0'/>
 			<button id='button-generate'>Generate</button>
 		</div>
-		<div id='checkboxes-scripts'>
-		</div>
-		<div id='words'>
+		<div>
+			<p id='p-words'></p>
 		</div>
 	</body>
 </html>

@@ -156,20 +156,6 @@ function generateWords()
 	displayWords();
 }
 
-
-
-function addRejectionLogging()
-{
-	for(var i=0; i<genlingLanguages.length; i++)
-	{
-		var lang = genlingLanguages[i];
-		lang.stemObject.rejectionCallback = function rejectionCallback(s, f)
-		{
-			console.log("Rejected:", s, f.toString());
-		};
-	}
-}
-
 window.init = function()
 {
 	selectLanguage = document.getElementById("select-language");
@@ -178,7 +164,6 @@ window.init = function()
 	buttonGenerate = document.getElementById("button-generate");
 	pWords = document.getElementById("p-words");
 	
-	addRejectionLogging();
 	setupLangOptions();
 	readData();
 	generateWords();

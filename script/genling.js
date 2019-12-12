@@ -200,8 +200,6 @@ Syllable.prototype.generate = function()
  * @param {number} [props.retryCount=100]
  *   The maximum number of times to retry generating a stem that isn't rejected
  *   by the filters. An error is thrown on reaching the maximum number.
- * @param {function} [props.rejectionCallback]
- *   A callback function to which all the rejected stems are passed.
  */
 function Stem(syllables, props)
 {
@@ -221,8 +219,6 @@ function Stem(syllables, props)
 		props.infix : "";
 	this.retryCount = (typeof props.retryCount !== 'undefined') ?
 		props.retryCount : 100;
-	this.rejectionCallback = (typeof props.rejectionCallback !== 'undefined') ?
-		props.rejectionCallback : null;
 }
 
 function unfilteredGenerate()
@@ -276,8 +272,8 @@ Stem.prototype.generate = function()
 			if(isRejected) break;
 		}
 		if(!isRejected) return stem;
-		if(self.rejectionCallback)
-			self.rejectionCallback(stem, filter);
+		console.debug("Rejection: %s", stem);
+		console.debug(filter);
 	}
 	throw "Too many filter rejected stems";
 };
@@ -315,14 +311,20 @@ Word.prototype.create = function(stemString)
 {
 	var self = this;
 	var string = stemString;
-		
+	
 	for(var i=0; i<self.replacements.length; i++)
 	{
 		var repl = self.replacements[i];
 		if(typeof repl === "function")
-			string = repl(string);
+			var newString = repl(string);
 		else
-			string = string.replace(repl[0], repl[1]);
+			var newString = string.replace(repl[0], repl[1]);
+		if(string != newString)
+		{
+			console.debug("Replacement: %s => %s", string, newString);
+			console.debug(repl);
+		}
+		string = newString;
 	}
 	return string;
 };
