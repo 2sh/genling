@@ -272,8 +272,7 @@ Stem.prototype.generate = function()
 			if(isRejected) break;
 		}
 		if(!isRejected) return stem;
-		console.debug("Rejection: %s", stem);
-		console.debug(filter);
+		console.debug("Rejection [%d]: %s", i, stem, filter);
 	}
 	throw "Too many filter rejected stems";
 };
@@ -321,8 +320,7 @@ Word.prototype.create = function(stemString)
 			var newString = string.replace(repl[0], repl[1]);
 		if(string != newString)
 		{
-			console.debug("Replacement: %s => %s", string, newString);
-			console.debug(repl);
+			console.debug("Replacement: %s => %s", string, newString, repl);
 		}
 		string = newString;
 	}
