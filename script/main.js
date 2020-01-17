@@ -108,7 +108,7 @@ function displayWords()
 		if(scriptDef)
 			stem = scriptDef.wordObject.create(stem);
 		var e = document.createElement("span");
-		e.title = i;
+		e.title = i+1;
 		e.textContent = stem;
 		pWords.appendChild(e);
 	}
@@ -153,9 +153,14 @@ function generateWords()
 {
 	var amount = parseInt(textAmount.value);
 	stemList = [];
-	for(var i=0; i<amount; i++)
+	var i = 0;
+	for(var x=0; x<100000; x++)
 	{
-		stemList.push(langDef.stemObject.generate());
+		if(i >= amount) break;
+		var stem = langDef.stemObject.generate();
+		if(stemList.indexOf(stem) > -1) continue;
+		stemList.push(stem);
+		i++;
 	}
 	displayWords();
 }
