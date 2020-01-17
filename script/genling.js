@@ -218,7 +218,7 @@ function Stem(syllables, props)
 	this.infix = (typeof props.infix !== 'undefined') ?
 		props.infix : "";
 	this.retryCount = (typeof props.retryCount !== 'undefined') ?
-		props.retryCount : 100;
+		props.retryCount : 1000;
 }
 
 function unfilteredGenerate()
