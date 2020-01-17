@@ -99,15 +99,19 @@ function selectScriptOption()
 
 function displayWords()
 {
-	var words = [];
+	pWords.innerHTML = "";
 	for(var i=0; i<stemList.length; i++)
 	{
+		if(i>0)
+			pWords.appendChild(document.createTextNode(" "));
 		var stem = stemList[i];
 		if(scriptDef)
 			stem = scriptDef.wordObject.create(stem);
-		words.push(stem);
+		var e = document.createElement("span");
+		e.title = i;
+		e.textContent = stem;
+		pWords.appendChild(e);
 	}
-	pWords.textContent = words.join(" ");
 }
 
 function readData()
