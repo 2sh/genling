@@ -271,8 +271,13 @@ Stem.prototype.generate = function()
 			}
 			if(isRejected) break;
 		}
-		if(!isRejected) return stem;
-		console.debug("Rejection [%d]: %s", i, stem, filter);
+		if(isRejected) return stem;
+		
+		var strTry = (i+1).toString();
+		if(strTry.length < 2) strTry = "0" + strTry;
+		console.debug("Rejection [%s] %s",
+			strTry, stem,
+			filter);
 	}
 	throw "Too many filter rejected stems";
 };
@@ -310,6 +315,7 @@ Word.prototype.create = function(stemString)
 {
 	var self = this;
 	var string = stemString;
+	var replCount = 0;
 	
 	for(var i=0; i<self.replacements.length; i++)
 	{
@@ -320,7 +326,12 @@ Word.prototype.create = function(stemString)
 			var newString = string.replace(repl[0], repl[1]);
 		if(string != newString)
 		{
-			console.debug("Replacement: %s => %s", string, newString, repl);
+			replCount++;
+			var strReplCount = replCount.toString();
+			if(strReplCount.length < 2) strReplCount = "0" + strReplCount;
+			console.debug("Replacement [%s] %s => %s",
+				strReplCount, stemString, newString,
+				repl);
 		}
 		string = newString;
 	}
