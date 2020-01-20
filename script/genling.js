@@ -271,7 +271,7 @@ Stem.prototype.generate = function()
 			}
 			if(isRejected) break;
 		}
-		if(isRejected) return stem;
+		if(!isRejected) return stem;
 		
 		var strTry = (i+1).toString();
 		if(strTry.length < 2) strTry = "0" + strTry;
