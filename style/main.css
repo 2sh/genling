@@ -2,3 +2,8 @@ html
 {
 	font-family: "Times New Roman", Times, serif;
 }
+
+#p-words
+{
+	word-spacing: 1em;
+}
