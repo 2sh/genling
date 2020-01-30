@@ -175,12 +175,12 @@ window.init = function()
 	
 	setupLangOptions();
 	readData();
-	generateWords();
 	
-	window.addEventListener("hashchange", readData, false);
 	selectLanguage.addEventListener("change", setHash, false);
 	selectScript.addEventListener("change", setHash, false);
 	buttonGenerate.addEventListener("click", generateWords, false);
+	
+	window.addEventListener("hashchange", readData, false);
 }
 
 })();
