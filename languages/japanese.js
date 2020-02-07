@@ -67,7 +67,7 @@ var filters = [
 	
 	function(s){return /n><.y/.test(s) && Math.random() > 0.1},
 	/x><.y/,
-	/x><[^kstpc]/,
+	/x><[^kstpc]/
 ];
 
 var stem = genling.Stem(syllables, {
