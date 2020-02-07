@@ -264,6 +264,12 @@ Stem.prototype.generate = function()
 			{
 				isRejected = filter(stem);
 			}
+			if(Array.isArray(filter))
+			{
+				filter[0].lastIndex = 0;
+				isRejected = filter[0].test(stem) &&
+					Math.random() > filter[1];
+			}
 			else
 			{
 				filter.lastIndex = 0;
@@ -321,9 +327,16 @@ Word.prototype.create = function(stemString)
 	{
 		var repl = self.replacements[i];
 		if(typeof repl === "function")
+		{
 			var newString = repl(string);
+		}
 		else
+		{
 			var newString = string.replace(repl[0], repl[1]);
+			if(repl.length > 2 && string != newString &&
+					Math.random() > repl[2])
+				newString = string;
+		}
 		if(string != newString)
 		{
 			replCount++;
