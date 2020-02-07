@@ -264,7 +264,7 @@ Stem.prototype.generate = function()
 			{
 				isRejected = filter(stem);
 			}
-			if(Array.isArray(filter))
+			else if(Array.isArray(filter))
 			{
 				filter[0].lastIndex = 0;
 				isRejected = filter[0].test(stem) &&
