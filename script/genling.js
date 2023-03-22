@@ -39,9 +39,9 @@ export class Segment
 	/**
 	 * @param {Array.<Phoneme>} phonemes
 	 *   The possible phonemes from which to generate a syllable segment.
-	 * @param {string} [prefix]
+	 * @param {string} [prefix=]
 	 *   The string added to the front of a generated segment.
-	 * @param {string} [suffix]
+	 * @param {string} [suffix=]
 	 *   The string added at the end of a generated segment.
 	 */
 	constructor(phonemes, prefix, suffix)
@@ -81,13 +81,13 @@ export class Syllable
 	 *   The syllable properties.
 	 * @param {number|Array.<number>} [props.position]
 	 *   The position of the syllable within a stem.
-	 * @param {number} [props.weight=0]
+	 * @param {number} [props.weight=1]
 	 *   The likelihood of being chosen as a syllable in a stem.
-	 * @param {string} [props.prefix]
+	 * @param {string} [props.prefix=]
 	 *   The string added to the front of a generated syllable.
-	 * @param {string} [props.suffix]
+	 * @param {string} [props.suffix=]
 	 *   The string added at the end of a generated syllable.
-	 * @param {string} [props.infix]
+	 * @param {string} [props.infix=]
 	 *   The string inserted between generated segments.
 	 */
 	constructor(segments, props)
@@ -166,13 +166,13 @@ export class Stem
 	 *   A stem is rejected when a function returns true or a regex pattern
 	 *   matches the stem. The stem string to be filtered includes the
 	 *   prefix, suffix and infixes specified in this object.
-	 * @param {string} [props.prefix]
+	 * @param {string} [props.prefix=]
 	 *   The string added to the front of a generated stem.
-	 * @param {string} [props.suffix]
+	 * @param {string} [props.suffix=]
 	 *   The string added at the end of a generated stem.
-	 * @param {string} [props.infix]
+	 * @param {string} [props.infix=]
 	 *   The string inserted between generated syllables.
-	 * @param {number} [props.retryCount=100]
+	 * @param {number} [props.retryCount=1000]
 	 *   The maximum number of times to retry generating a stem that isn't rejected
 	 *   by the filters. An error is thrown on reaching the maximum number.
 	 */
