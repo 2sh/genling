@@ -1,7 +1,6 @@
-import { Phoneme, Segment, Syllable, Stem, Word } from "../script/genling.js"
+import { Phoneme, Segment, Syllable, Stem, Word } from "../genling.js"
 
-window.genlingLanguages.push((function()
-{
+
 var P = (...args) => new Phoneme(...args);
 
 var syllables = []
@@ -231,7 +230,7 @@ var reps = [
 
 var latin = new Word(reps);
 
-return {
+export default {
 	name: "Conlang",
 	stemObject: stem,
 	scripts:
@@ -241,6 +240,4 @@ return {
 			wordObject: latin
 		}
 	]
-};
-
-})());
+}

@@ -1,3 +1,5 @@
+import languages from "./languages.js"
+
 (function()
 {
 
@@ -32,9 +34,9 @@ function setHash()
 
 function setLangIndexByName(name)
 {
-	for(var i=0; i<genlingLanguages.length; i++)
+	for(var i=0; i<languages.length; i++)
 	{
-		var lang = genlingLanguages[i];
+		var lang = languages[i];
 		if(lang.name !== name) continue;
 		langIndex = i;
 		break;
@@ -56,9 +58,9 @@ function setScriptIndexByName(name)
 function setupLangOptions()
 {
 	setupLangOptions.innerHTML = "";
-	for(var i=0; i<genlingLanguages.length; i++)
+	for(var i=0; i<languages.length; i++)
 	{
-		var lang = genlingLanguages[i];
+		var lang = languages[i];
 		var option = document.createElement("option");
 		option.textContent = lang.name;
 		option.value = lang.name;
@@ -122,7 +124,7 @@ function readData()
 	var hash = getHash();
 	
 	if(hash && hash.length > 0) setLangIndexByName(hash[0]);
-	langDef = genlingLanguages[langIndex];
+	langDef = languages[langIndex];
 	
 	if(hash && hash.length > 1) setScriptIndexByName(hash[1]);
 	if(langDef.scripts[scriptIndex] !== undefined)

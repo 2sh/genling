@@ -1,7 +1,6 @@
-import { Phoneme, Segment, Syllable, Stem, Word } from "../script/genling.js"
+import { Phoneme, Segment, Syllable, Stem, Word } from "../genling.js"
 
-window.genlingLanguages.push((function()
-{
+
 var P = (...args) => new Phoneme(...args);
 
 var segments = []
@@ -232,7 +231,7 @@ var hepburn = new Word(repsHepburn.concat(repshelpers));
 var nihon = new Word(repsNihon.concat(repshelpers));
 var kunrei = new Word(repsKunrei.concat(repshelpers));
 
-return {
+export default {
 	name: "Japanese",
 	stemObject: stem,
 	scripts:
@@ -254,6 +253,4 @@ return {
 			wordObject: kunrei
 		}
 	]
-};
-
-})());
+}
