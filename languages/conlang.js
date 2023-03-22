@@ -1,6 +1,8 @@
+import { Phoneme, Segment, Syllable, Stem, Word } from "../script/genling.js"
+
 window.genlingLanguages.push((function()
 {
-var P=genling.Phoneme;
+var P = (...args) => new Phoneme(...args);
 
 var syllables = []
 
@@ -15,7 +17,7 @@ var phonemes = [
 	P("h", 1),
 	P("c", 1), // C
 ];
-segments.push(genling.Segment(phonemes));
+segments.push(new Segment(phonemes));
 
 // Medial
 var phonemes = [
@@ -92,7 +94,7 @@ var phonemes = [
 	P("rh", 3),
 	P("rj", 3)
 ];
-segments.push(genling.Segment(phonemes));
+segments.push(new Segment(phonemes));
 
 // Nucleus
 var phonemes = [
@@ -107,7 +109,7 @@ var phonemes = [
 	P("oe", 2), // 9
 	P("y", 2)   // Y
 ];
-segments.push(genling.Segment(phonemes));
+segments.push(new Segment(phonemes));
 
 // Coda
 var phonemes = [
@@ -120,9 +122,9 @@ var phonemes = [
 	P("h", 2),
 	P("r", 3)
 ];
-segments.push(genling.Segment(phonemes));
+segments.push(new Segment(phonemes));
 
-syllables.push(genling.Syllable(segments, {position: 0}));
+syllables.push(new Syllable(segments, {position: 0}));
 
 
 // Second syllable of stem
@@ -175,7 +177,7 @@ var phonemes = [
 	P("r", 2),
 	P("rj", 1)
 ];
-segments.push(genling.Segment(phonemes));
+segments.push(new Segment(phonemes));
 
 
 // Nucleus
@@ -185,9 +187,9 @@ var phonemes = [
 	P("e", 3),
 	P("o", 3)
 ];
-segments.push(genling.Segment(phonemes));
+segments.push(new Segment(phonemes));
 
-syllables.push(genling.Syllable(segments, {position: 1}));
+syllables.push(new Syllable(segments, {position: 1}));
 
 
 var filters = [
@@ -205,7 +207,7 @@ var filters = [
 	/^._/ // Stem starting with an initial
 ];
 
-var stem = genling.Stem(syllables, {
+var stem = new Stem(syllables, {
 	"balance": [5, 2],
 	"filters": filters,
 	"infix": "#"
@@ -227,7 +229,7 @@ var reps = [
 ];
 
 
-var latin = genling.Word(reps);
+var latin = new Word(reps);
 
 return {
 	name: "Conlang",

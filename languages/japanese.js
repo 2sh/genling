@@ -1,6 +1,8 @@
+import { Phoneme, Segment, Syllable, Stem, Word } from "../script/genling.js"
+
 window.genlingLanguages.push((function()
 {
-var P=genling.Phoneme;
+var P = (...args) => new Phoneme(...args);
 
 var segments = []
 
@@ -22,14 +24,14 @@ var phonemes = [
 	P("b", 1),
 	P("p", 1)
 ];
-segments.push(genling.Segment(phonemes));
+segments.push(new Segment(phonemes));
 
 // Medial
 var phonemes = [
 	P("_", 20),
 	P("y", 1)
 ];
-segments.push(genling.Segment(phonemes));
+segments.push(new Segment(phonemes));
 
 // Nucleus
 var phonemes = [
@@ -39,7 +41,7 @@ var phonemes = [
 	P("e", 3),
 	P("o", 3)
 ];
-segments.push(genling.Segment(phonemes));
+segments.push(new Segment(phonemes));
 
 // Coda
 var phonemes = [
@@ -48,9 +50,9 @@ var phonemes = [
 	P("n", 9),
 	P("x", 3)
 ];
-segments.push(genling.Segment(phonemes));
+segments.push(new Segment(phonemes));
 
-var syllables = [genling.Syllable(segments, {prefix: "<", suffix: ">"})];
+var syllables = [new Syllable(segments, {prefix: "<", suffix: ">"})];
 
 var filters = [
 	/_y/,
@@ -70,7 +72,7 @@ var filters = [
 	/x><[^kstpc]/
 ];
 
-var stem = genling.Stem(syllables, {
+var stem = new Stem(syllables, {
 	"balance": [2, 12, 8, 2, 1],
 	"filters": filters
 });
@@ -225,10 +227,10 @@ var repsKunrei = [
 ];
 
 
-var hiragana = genling.Word(repsHiragana.concat(repshelpers));
-var hepburn = genling.Word(repsHepburn.concat(repshelpers));
-var nihon = genling.Word(repsNihon.concat(repshelpers));
-var kunrei = genling.Word(repsKunrei.concat(repshelpers));
+var hiragana = new Word(repsHiragana.concat(repshelpers));
+var hepburn = new Word(repsHepburn.concat(repshelpers));
+var nihon = new Word(repsNihon.concat(repshelpers));
+var kunrei = new Word(repsKunrei.concat(repshelpers));
 
 return {
 	name: "Japanese",
