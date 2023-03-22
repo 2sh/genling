@@ -1,12 +1,11 @@
 import { Phoneme, Segment, Syllable, Stem, Word } from "../genling.js"
 
 
-var P = (...args) => new Phoneme(...args);
+const P = (...args) => new Phoneme(...args);
 
-var segments = []
+const segments = []
 
-// Inital
-var phonemes = [
+const phonemesInitial = [
 	P("_",  16),
 	P("k",  5),
 	P("s", 4),
@@ -23,37 +22,34 @@ var phonemes = [
 	P("b", 1),
 	P("p", 1)
 ];
-segments.push(new Segment(phonemes));
+segments.push(new Segment(phonemesInitial));
 
-// Medial
-var phonemes = [
+const phonemesMedial = [
 	P("_", 20),
 	P("y", 1)
 ];
-segments.push(new Segment(phonemes));
+segments.push(new Segment(phonemesMedial));
 
-// Nucleus
-var phonemes = [
+const phonemesNucleus = [
 	P("a", 5),
 	P("i", 4),
 	P("u", 4),
 	P("e", 3),
 	P("o", 3)
 ];
-segments.push(new Segment(phonemes));
+segments.push(new Segment(phonemesNucleus));
 
-// Coda
-var phonemes = [
+const phonemesCoda = [
 	P("_", 15),
 
 	P("n", 9),
 	P("x", 3)
 ];
-segments.push(new Segment(phonemes));
+segments.push(new Segment(phonemesCoda));
 
-var syllables = [new Syllable(segments, {prefix: "<", suffix: ">"})];
+const syllables = [new Syllable(segments, {prefix: "<", suffix: ">"})];
 
-var filters = [
+const filters = [
 	/_y/,
 	/x>$/,
 	
@@ -71,16 +67,16 @@ var filters = [
 	/x><[^kstpc]/
 ];
 
-var stem = new Stem(syllables, {
+const stem = new Stem(syllables, {
 	"balance": [2, 12, 8, 2, 1],
 	"filters": filters
 });
 
-var repshelpers = [
+const repshelpers = [
 	[/[<>]/g, ""],
 ]
 
-var hiraganaMapping = {
+const hiraganaMapping = {
 	"<ya": "や",
 	"<yu": "ゆ",
 	"<yo": "よ",
@@ -167,7 +163,7 @@ var hiraganaMapping = {
 	"<o": "お"
 };
 
-var repsHiragana = [
+const repsHiragana = [
 	[/_/g, ""],
 	[/([^<])ya/g, "$1iゃ"],
 	[/([^<])yu/g, "$1iゅ"],
@@ -177,7 +173,7 @@ var repsHiragana = [
 	[/x>/g, "っ"]
 ];
 
-var repsHepburn = [
+const repsHepburn = [
 	[/n><_/g, "n'"],
 	[/n><y/g, "n'y"],
 	
@@ -203,7 +199,7 @@ var repsHepburn = [
 	[/o><[ou]/g, "ō"],
 ];
 
-var repsNihon = [
+const repsNihon = [
 	[/n><_/g, "n'"],
 	[/n><y/g, "n'y"],
 	
@@ -212,7 +208,7 @@ var repsNihon = [
 	[/x><(.)/g, "$1$1"],
 ];
 
-var repsKunrei = [
+const repsKunrei = [
 	[/n><_/g, "n'"],
 	[/n><y/g, "n'y"],
 	
@@ -226,10 +222,10 @@ var repsKunrei = [
 ];
 
 
-var hiragana = new Word(repsHiragana.concat(repshelpers));
-var hepburn = new Word(repsHepburn.concat(repshelpers));
-var nihon = new Word(repsNihon.concat(repshelpers));
-var kunrei = new Word(repsKunrei.concat(repshelpers));
+const hiragana = new Word(repsHiragana.concat(repshelpers));
+const hepburn = new Word(repsHepburn.concat(repshelpers));
+const nihon = new Word(repsNihon.concat(repshelpers));
+const kunrei = new Word(repsKunrei.concat(repshelpers));
 
 export default {
 	name: "Japanese",

@@ -1,15 +1,17 @@
 import { Phoneme, Segment, Syllable, Stem, Word } from "../genling.js"
 
 
-var P = (...args) => new Phoneme(...args);
+const P = (...args) => new Phoneme(...args);
 
-var syllables = []
+const syllables = []
+
+let segments, phonemes
 
 // First syllable of stem
-var segments = []
+segments = []
 
 // Inital
-var phonemes = [
+phonemes = [
 	P("_", 10),
 
 	P("j", 1),
@@ -19,7 +21,7 @@ var phonemes = [
 segments.push(new Segment(phonemes));
 
 // Medial
-var phonemes = [
+phonemes = [
 	P("_", 20),
 
 	P("t", 5),  // t
@@ -96,7 +98,7 @@ var phonemes = [
 segments.push(new Segment(phonemes));
 
 // Nucleus
-var phonemes = [
+phonemes = [
 	P("a", 5),  // a
 	P("A", 3),  // @
 	P("i", 4),  // I
@@ -111,7 +113,7 @@ var phonemes = [
 segments.push(new Segment(phonemes));
 
 // Coda
-var phonemes = [
+phonemes = [
 	P("_", 22),
 
 	P("n", 6),
@@ -127,10 +129,10 @@ syllables.push(new Syllable(segments, {position: 0}));
 
 
 // Second syllable of stem
-var segments = []
+segments = []
 
 // Inital
-var phonemes = [
+phonemes = [
 	P("t", 4),
 	P("tj", 2),
 
@@ -180,7 +182,7 @@ segments.push(new Segment(phonemes));
 
 
 // Nucleus
-var phonemes = [
+phonemes = [
 	P("a", 5),
 	P("A", 5),
 	P("e", 3),
@@ -191,7 +193,7 @@ segments.push(new Segment(phonemes));
 syllables.push(new Syllable(segments, {position: 1}));
 
 
-var filters = [
+const filters = [
 	/x$/,
 	/h$/,
 	/c$/,
@@ -206,14 +208,14 @@ var filters = [
 	/^._/ // Stem starting with an initial
 ];
 
-var stem = new Stem(syllables, {
+const stem = new Stem(syllables, {
 	"balance": [5, 2],
 	"filters": filters,
 	"infix": "#"
 });
 
 
-var reps = [
+const reps = [
 	[/_/g, ""],
 
 	[/A/g, "ı"],
@@ -228,7 +230,7 @@ var reps = [
 ];
 
 
-var latin = new Word(reps);
+const latin = new Word(reps);
 
 export default {
 	name: "Conlang",
