@@ -3,18 +3,18 @@ import languages from "./languages.js"
 (function()
 {
 
-var langDef = null;
-var langIndex = 0;
-var scriptDef = null;
-var scriptIndex = 0;
+let langDef = null;
+let langIndex = 0;
+let scriptDef = null;
+let scriptIndex = 0;
 
-var stemList = [];
+let stemList = [];
 
-var selectLanguage;
-var selectScript;
-var textAmount;
-var buttonGenerate;
-var pWords;
+let selectLanguage;
+let selectScript;
+let textAmount;
+let buttonGenerate;
+let pWords;
 
 function getHash()
 {
@@ -27,59 +27,47 @@ function getHash()
 
 function setHash()
 {
-	var langName = selectLanguage.options[selectLanguage.selectedIndex].value;
-	var scriptName = selectScript.options[selectScript.selectedIndex].value;
+	const langName = selectLanguage.options[selectLanguage.selectedIndex].value;
+	const scriptName = selectScript.options[selectScript.selectedIndex].value;
 	window.location.hash = langName + "/" + scriptName;
 }
 
 function setLangIndexByName(name)
 {
-	for(var i=0; i<languages.length; i++)
-	{
-		var lang = languages[i];
-		if(lang.name !== name) continue;
-		langIndex = i;
-		break;
-	}
+	langIndex = languages.findIndex(l => l.name == name)
+	if (!(langIndex >= 0)) langIndex = 0
 }
 
 function setScriptIndexByName(name)
 {
-	for(var i=0; i<langDef.scripts.length; i++)
-	{
-		var script = langDef.scripts[i];
-		if(script.name !== name) continue;
-		scriptIndex = i;
-		return;
-	}
-	scriptIndex = null;
+	scriptIndex = langDef.scripts.findIndex(s => s.name == name)
+	if (!(scriptIndex >= 0)) scriptIndex = null
 }
 
 function setupLangOptions()
 {
 	setupLangOptions.innerHTML = "";
-	for(var i=0; i<languages.length; i++)
+	languages.forEach(lang =>
 	{
-		var lang = languages[i];
-		var option = document.createElement("option");
+		const option = document.createElement("option");
 		option.textContent = lang.name;
 		option.value = lang.name;
 		selectLanguage.appendChild(option);
-	}
+	})
 }
 
 function setupScriptOptions()
 {
 	selectScript.innerHTML = "";
-	for(var i=0; i<langDef.scripts.length; i++)
+	langDef.scripts.forEach(script =>
 	{
-		var script = langDef.scripts[i];
-		var option = document.createElement("option");
+		const option = document.createElement("option");
 		option.textContent = script.name;
 		option.value = script.name;
 		selectScript.appendChild(option);
-	}
-	var option = document.createElement("option");
+	})
+	
+	const option = document.createElement("option");
 	option.textContent = "Raw";
 	option.value = "Raw";
 	selectScript.appendChild(option);
@@ -92,36 +80,32 @@ function selectLangOption()
 
 function selectScriptOption()
 {
-	if(scriptIndex != null)
-		var index = scriptIndex;
-	else
-		var index = selectScript.children.length-1;
+	const index = scriptIndex != null
+		? scriptIndex
+		: selectScript.children.length-1
 	selectScript.children[index].selected = true;
 }
 
 function displayWords()
 {
 	pWords.innerHTML = "";
-	for(var i=0; i<stemList.length; i++)
+	stemList.forEach((stem, i) =>
 	{
-		if(i>0)
-			pWords.appendChild(document.createTextNode(" "));
-		var stem = stemList[i];
-		if(scriptDef)
-			stem = scriptDef.wordObject.create(stem);
-		var e = document.createElement("span");
+		if(i>0) pWords.appendChild(document.createTextNode(" "));
+		if(scriptDef) stem = scriptDef.wordObject.create(stem);
+		const e = document.createElement("span");
 		e.title = i+1;
 		e.textContent = stem;
 		pWords.appendChild(e);
-	}
+	})
 }
 
 function readData()
 {
-	var prevLangDef = langDef;
-	var prevScriptDef = scriptDef;
+	const prevLangDef = langDef;
+	const prevScriptDef = scriptDef;
 	
-	var hash = getHash();
+	const hash = getHash();
 	
 	if(hash && hash.length > 0) setLangIndexByName(hash[0]);
 	langDef = languages[langIndex];
@@ -153,10 +137,10 @@ function readData()
 
 function generateWords()
 {
-	var amount = parseInt(textAmount.value);
+	const amount = parseInt(textAmount.value);
 	stemList = [];
-	var i = 0;
-	for(var x=0; x<100000; x++)
+	let i = 0;
+	for(let x=0; x<100000; x++)
 	{
 		if(i >= amount) break;
 		var stem = langDef.stemObject.generate();
