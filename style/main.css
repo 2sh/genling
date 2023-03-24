@@ -3,7 +3,16 @@ html
 	font-family: "Times New Roman", Times, serif;
 }
 
-#p-words
+.words
 {
-	word-spacing: 1em;
+	display: block;
+	list-style-type: none;
+	padding: 0;
+	margin: 8px;
+}
+
+.words li
+{
+	display: inline-block;
+	margin: 4px;
 }

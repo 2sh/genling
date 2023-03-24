@@ -7,20 +7,33 @@
 		
 		<link type="text/css" rel="stylesheet" href="style/main.css"/>
 		
-		<script type="module" src='script/main.js'></script>
+		<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+		<script src="https://unpkg.com/vue-router@4.1.6/dist/vue-router.global.js"></script>
+		<script type='module' src='script/main.js'></script>
 	</head>
-	<body onload='init()'>
-		<div>
-			<select id='select-language'></select>
+	<body>
+		<div id='genling'>
+			<router-view></router-view>
 		</div>
-		<div>
-			<select id='select-script'></select>
-			<input type='number' id='text-amount'
-				value='20' min='0'/>
-			<button id='button-generate'>Generate</button>
-		</div>
-		<div>
-			<p id='p-words'></p>
-		</div>
+		<template id='generator'>
+			<div>
+				<select v-model='selectedLanguage' @change='setCurrentRoute'>
+					<option v-for='language in languages' :value='language'>{{ language.name }}</option>
+				</select>
+			</div>
+			<div>
+				<select v-model='selectedScript' @change='setCurrentRoute'>
+					<option v-for='script in selectedLanguage.scripts' :value='script'>{{ script.name }}</option>
+					<option :value="rawScript">{{ rawScript.name }}</option>
+				</select>
+				<input type='number' min='0' v-model='wordAmount'/>
+				<button @click='generate'>Generate</button>
+			</div>
+			<div>
+				<ul class='words'>
+					<li v-for='word in wordList'>{{ word }}</li>
+				</ul>
+			</div>
+		</template>
 	</body>
 </html>
