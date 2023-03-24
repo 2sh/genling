@@ -40,7 +40,7 @@ const Genling =
 			for(let x=0; x<100000; x++)
 			{
 				if(newStemList.length >= wordAmount.value) break;
-				var stem = selectedLanguage.value.stemObject.generate()
+				const stem = selectedLanguage.value.stemObject.generate()
 				if(newStemList.indexOf(stem) > -1) continue;
 				newStemList.push(stem)
 			}
