@@ -11,7 +11,6 @@ const rawScript = {
 
 const useLocalStorage = (key, defaultValue) =>
 {
-	const type = typeof defaultValue.value
 	const storedValue = localStorage.getItem(key)
 	if (storedValue) defaultValue.value = JSON.parse(storedValue)
 	watch(defaultValue, () => (defaultValue.value !== null
