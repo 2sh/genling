@@ -291,8 +291,6 @@ export class Word
 	 */
 	constructor(replacements)
 	{
-		if(!(this instanceof Word))
-			return new Word(replacements)
 		this.replacements = (typeof replacements !== 'undefined')
 			? replacements
 			: []
