@@ -98,12 +98,18 @@ const Genling =
 			}
 			else
 			{
-				selectedLanguage.value = language
-				if (!from || from.params.languageName != to.params.languageName)
+				const hasLanguageChanged = !from || from.params.languageName != to.params.languageName
+				const hasScriptChanged = !from || from.params.scriptName != to.params.scriptName
+				if (hasLanguageChanged)
+				{
+					selectedLanguage.value = language
 					generateStems()
-				selectedScript.value = script
-				if (!from || from.params.scriptName != to.params.scriptName)
+				}
+				if (hasLanguageChanged || hasScriptChanged)
+				{
+					selectedScript.value = script
 					createWords()
+				}
 			}
 		}
 		
