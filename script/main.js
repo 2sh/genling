@@ -36,15 +36,19 @@ const Genling =
 		
 		const generateStems = () =>
 		{
-			const newStemList = []
-			for(let x=0; x<100000; x++)
+			const newStemList = new Set()
+			selectedLanguage.value.stemObject.generate(stem =>
 			{
-				if(newStemList.length >= wordAmount.value) break;
-				const stem = selectedLanguage.value.stemObject.generate()
-				if(newStemList.indexOf(stem) > -1) continue;
-				newStemList.push(stem)
-			}
-			stemList.value = newStemList
+				if (stemList.value.includes(stem))
+					return false
+				const prevLength = newStemList.size
+				newStemList.add(stem)
+				if (prevLength == newStemList.size)
+					return false
+				if (newStemList.size >= wordAmount.value)
+					return null
+			})
+			stemList.value = [...newStemList]
 		}
 		
 		const createWords = () =>

@@ -189,55 +189,90 @@ export class Stem
 		this.prefix = props.prefix || ""
 		this.suffix = props.suffix || ""
 		this.infix = props.infix || ""
-		this.retryCount = props.retryCount || 1000
+		this.timeout = props.timeout || 2000
 	}
 	
-	#unfilteredGenerate()
+	#generateUnfiltered()
 	{
 		const syllableAmount = weightedChoice(this.balance) + 1
-		const string = Array.from({length: syllableAmount}, (_, i) => {
-			const syllables = this.syllables.filter(s => s.isPermittedPosition(i, syllableAmount))
-			return syllables[weightedChoice(syllables.map(s => s.weight))].generate()
+		const syllableStrings = Array.from({length: syllableAmount},
+			(_, i) =>
+		{
+			const syllables = this.syllables.filter(s =>
+				s.isPermittedPosition(i, syllableAmount))
+			const syllableIndex = weightedChoice(
+				syllables.map(s => s.weight))
+			return syllables[syllableIndex].generate()
 		})
-		return this.prefix + string.join(this.infix) + this.suffix
+		return this.prefix
+			+ syllableStrings.join(this.infix)
+			+ this.suffix
+	}
+	
+	#findRejectionFilter(stem)
+	{
+		return this.filters.find(filter =>
+		{
+			if(typeof filter === "function")
+			{
+				return filter(stem)
+			}
+			else if(Array.isArray(filter))
+			{
+				filter[0].lastIndex = 0
+				return filter[0].test(stem)
+					&& Math.random() > filter[1]
+			}
+			else
+			{
+				filter.lastIndex = 0
+				return filter.test(stem)
+			}
+		})
 	}
 	
 	/**
 	 * Generate a stem by its syllables.
 	 *
+	 * 	@param {number} [props.callback]
+	 *   A callback which repeatedly receives a new stem as its first
+	 *   argument, instead of just returning a single stem.
+	 *   If the return value of the callback is false, the generator
+	 *   counts that as rejected (if for example it wasn't unique),
+	 *   making use of the timeout functionality. If the return value
+	 *   is null, the generator stops.
+	 * 	@param {number} [props.rejectionCallback]
+	 *   A callback which receives the rejected stem as the first
+	 *   argument, and the filter that rejected it as the second
+	 *   argument.
+	 * 
 	 * @return {string}
-	 *   The generated stem.
+	 *   The generated stem. The last one if a callback is specified.
 	 */
-	generate()
+	generate(callback, rejectionCallback)
 	{
-		for(var i=0; i<this.retryCount; i++)
+		let now = Date.now()
+		do
 		{
-			const stem = this.#unfilteredGenerate()
-			const rejectedFilter = this.filters.find(filter =>
-			{
-				if(typeof filter === "function")
-				{
-					return filter(stem)
-				}
-				else if(Array.isArray(filter))
-				{
-					filter[0].lastIndex = 0
-					return filter[0].test(stem)
-						&& Math.random() > filter[1]
-				}
-				else
-				{
-					filter.lastIndex = 0
-					return filter.test(stem)
-				}
-			})
-			if(!rejectedFilter) return stem
+			const stem = this.#generateUnfiltered()
+			const rejectionFilter = this.#findRejectionFilter(stem)
 			
-			console.debug("Rejection [%s] %s",
-					(i+1).toString().padStart(2, "0"), stem,
-				rejectedFilter)
+			if (!rejectionFilter)
+			{
+				if (!callback) return stem
+				const r = callback(stem)
+				if (r === null)
+					return stem
+				if (r !== false)
+					now = Date.now()
+			}
+			else if (rejectionCallback)
+			{
+				rejectionCallback(stem, rejectionFilter)
+			}
 		}
-		throw "Too many filter rejected stems"
+		while (Date.now()-now < this.timeout)
+		throw "Timed out. Too many rejected stems."
 	}
 }
 
@@ -268,10 +303,15 @@ export class Word
 	 *
 	 * @param {string} stemString
 	 *   The stem string from which to create a word.
+	 * @param {string} replacementCallback
+	 *   A callback which is called whenever a replacement has occured,
+	 *   receiving the arguments of the original stem string,
+	 *   the string before the change, the string after the change,
+	 *   and the replacement that caused the change.
 	 * @return {string}
 	 *   The created word.
 	 */
-	create(stemString)
+	create(stemString, replacementCallback)
 	{
 		let replCount = 0
 		return this.replacements.reduce((string, repl) =>
@@ -291,12 +331,9 @@ export class Word
 					newString = tempNewString
 				}
 			}
-			if(string != newString)
+			if(replacementCallback && string != newString)
 			{
-				console.debug("Replacement [%s] %s => %s",
-						(replCount++).toString().padStart(2, "0"),
-						stemString, newString,
-					repl)
+				replacementCallback(stemString, string, newString, repl)
 			}
 			return newString
 		}, stemString)
