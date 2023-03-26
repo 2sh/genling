@@ -313,7 +313,6 @@ export class Word
 	 */
 	create(stemString, replacementCallback)
 	{
-		let replCount = 0
 		return this.replacements.reduce((string, repl) =>
 		{
 			let newString = string
