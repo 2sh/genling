@@ -175,9 +175,8 @@ export class Stem
 	 *   The string added at the end of a generated stem.
 	 * @param {string} [props.infix=]
 	 *   The string inserted between generated syllables.
-	 * @param {number} [props.timeout=2000]
-	 *   The maximum amount of time in milliseconds to wait for a stem
-	 *   to generate, after filtering, etc.
+	 * @param {number} [props.rejectionLimit=1000]
+	 *   The maximum number of rejections for a single stem.
 	 *   An error is thrown on reaching the maximum number.
 	 */
 	constructor(syllables, props)
@@ -189,7 +188,7 @@ export class Stem
 		this.prefix = props.prefix || ""
 		this.suffix = props.suffix || ""
 		this.infix = props.infix || ""
-		this.timeout = props.timeout || 2000
+		this.rejectionLimit = props.rejectionLimit || 1000
 	}
 	
 	#generateUnfiltered()
@@ -251,7 +250,7 @@ export class Stem
 	 */
 	generate(callback, rejectionCallback)
 	{
-		let now = Date.now()
+		let rejectionCount = 0
 		do
 		{
 			const stem = this.#generateUnfiltered()
@@ -263,16 +262,22 @@ export class Stem
 				const r = callback(stem)
 				if (r === null)
 					return stem
-				if (r !== false)
-					now = Date.now()
+				if (r === false)
+					rejectionCount++
+				else
+					rejectionCount = 0
 			}
-			else if (rejectionCallback)
+			else
 			{
-				rejectionCallback(stem, rejectionFilter)
+				rejectionCount++
+				if (rejectionCallback)
+				{
+					rejectionCallback(stem, rejectionFilter)
+				}
 			}
 		}
-		while (Date.now()-now < this.timeout)
-		throw "Timed out. Too many rejected stems."
+		while (rejectionCount < this.rejectionLimit)
+		throw "Too many rejected stems."
 	}
 }
 
