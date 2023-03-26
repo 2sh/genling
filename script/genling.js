@@ -60,8 +60,10 @@ export class Segment
 	 */
 	generate()
 	{
+		const phonemeIndex = weightedChoice(
+			this.phonemes.map(p => p.weight))
 		return this.prefix
-			+ this.phonemes[weightedChoice(this.phonemes.map(p => p.weight))].grapheme
+			+ this.phonemes[phonemeIndex].grapheme
 			+ this.suffix
 	}
 }
@@ -163,18 +165,20 @@ export class Stem
 	 *     The balance of the amount of syllables in the generated stem
 	 * @param {Array.<function|RegExp>} [props.filters=[]]
 	 *   An array of functions and regex objects for filtering stems.
-	 *   A stem is rejected when a function returns true or a regex pattern
-	 *   matches the stem. The stem string to be filtered includes the
-	 *   prefix, suffix and infixes specified in this object.
+	 *   A stem is rejected when a function returns true or a regex
+	 *   pattern matches the stem. The stem string to be filtered
+	 *   includes the prefix, suffix and infixes specified in this
+	 *   object.
 	 * @param {string} [props.prefix=]
 	 *   The string added to the front of a generated stem.
 	 * @param {string} [props.suffix=]
 	 *   The string added at the end of a generated stem.
 	 * @param {string} [props.infix=]
 	 *   The string inserted between generated syllables.
-	 * @param {number} [props.retryCount=1000]
-	 *   The maximum number of times to retry generating a stem that isn't rejected
-	 *   by the filters. An error is thrown on reaching the maximum number.
+	 * @param {number} [props.timeout=2000]
+	 *   The maximum amount of time in milliseconds to wait for a stem
+	 *   to generate, after filtering, etc.
+	 *   An error is thrown on reaching the maximum number.
 	 */
 	constructor(syllables, props)
 	{
@@ -239,10 +243,10 @@ export class Stem
 
 /**
  * A word formed from a stem.
- * A Word object may represent an inflection such as a noun declension, verb
- * conjugation, derivation, etc. Finally, the replacements may also remove
- * the helper characters (prefixes, infixes and suffixes) and transliterate
- * the raw graphemes to the correct writing system.
+ * A Word object may represent an inflection such as a noun declension,
+ * verb conjugation, derivation, etc. Finally, the replacements may also
+ * remove the helper characters (prefixes, infixes and suffixes) and
+ * transliterate the raw graphemes to the correct writing system.
  */
 export class Word
 {
