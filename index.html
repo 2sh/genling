@@ -16,12 +16,12 @@
 			<router-view></router-view>
 		</div>
 		<template id='generator'>
-			<div>
+			<div class='toolbar'>
 				<select v-model='selectedLanguage' @change='setCurrentRoute'>
 					<option v-for='language in languages' :value='language'>{{ language.name }}</option>
 				</select>
 			</div>
-			<div>
+			<div class='toolbar'>
 				<select v-model='selectedScript' @change='setCurrentRoute'>
 					<option v-for='script in selectedLanguage.scripts' :value='script'>{{ script.name }}</option>
 					<option :value="rawScript">{{ rawScript.name }}</option>

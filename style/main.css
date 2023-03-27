@@ -3,6 +3,11 @@ html
 	font-family: "Times New Roman", Times, serif;
 }
 
+.toolbar > *:not(:last-child)
+{
+	margin-right: 5px;
+}
+
 .words
 {
 	display: block;
