@@ -5,8 +5,10 @@ In the generating process, weights and probabilities affect the usage of individ
 
 The title of this project is in Latin and translates to "Generator of Languages".
 
+The library is located at `script/genling.js` but it can be used through the web app. New language files can be added to the `script/languages.js` file.
+
 ## Running
-The web app just need to be hosted by a webserver such as Apache or Nginx, or simply with Python, running the following command in the direction with the index.html file:
+The web app just needs to be hosted by a webserver such as Apache or Nginx, or simply with Python, running the following command in the directory with the index.html file:
 ```
 python3 -m http.server
 ```
