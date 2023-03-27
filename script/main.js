@@ -30,6 +30,7 @@ const Genling =
 		const wordList = shallowRef([])
 		
 		const wordAmount = useLocalStorage("wordAmount", shallowRef(20))
+		const debug = useLocalStorage("debug", shallowRef(false))
 		
 		const selectedLanguage = shallowRef()
 		const selectedScript = shallowRef()
@@ -37,7 +38,18 @@ const Genling =
 		const generateStems = () =>
 		{
 			const newStemList = new Set()
-			selectedLanguage.value.stemObject.generate(stem =>
+			let totalFilterRejections = 0
+			let totalCallbackRejections = 0
+			
+			const rejectionCallback = !debug.value ? null :
+				(stem, rejectionFilter) =>
+			{
+				setTimeout(() => console.log(stem, rejectionFilter), 0)
+			}
+			
+			selectedLanguage.value.stemObject.generate((stem,
+				filterRejections,
+				callbackRejections) =>
 			{
 				if (stemList.value.includes(stem))
 					return false
@@ -45,10 +57,17 @@ const Genling =
 				newStemList.add(stem)
 				if (prevLength == newStemList.size)
 					return false
+				totalFilterRejections += filterRejections
+				totalCallbackRejections += callbackRejections
 				if (newStemList.size >= wordAmount.value)
 					return null
-			})
+			}, rejectionCallback)
 			stemList.value = [...newStemList]
+			if (debug.value)
+			{
+				console.log("Average filter rejections:", totalFilterRejections/wordAmount.value)
+				console.log("Average callback rejections:", totalCallbackRejections/wordAmount.value)
+			}
 		}
 		
 		const createWords = () =>
@@ -127,6 +146,7 @@ const Genling =
 			setCurrentRoute,
 			generate,
 			wordAmount,
+			debug,
 			rawScript,
 			wordList,
 		}

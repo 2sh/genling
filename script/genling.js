@@ -240,17 +240,20 @@ export class Stem
 	 *   counts that as rejected (if for example it wasn't unique),
 	 *   making use of the timeout functionality. If the return value
 	 *   is null, the generator stops.
+	 *   The second argument is the amount of rejected stems up to the
+	 *   current stem.
 	 * 	@param {number} [props.rejectionCallback]
 	 *   A callback which receives the rejected stem as the first
-	 *   argument, and the filter that rejected it as the second
-	 *   argument.
+	 *   argument, the filter that rejected it as the second
+	 *   argument
 	 * 
 	 * @return {string}
 	 *   The generated stem. The last one if a callback is specified.
 	 */
 	generate(callback, rejectionCallback)
 	{
-		let rejectionCount = 0
+		let filterRejectionCount = 0
+		let callbackRejectionCount = 0
 		do
 		{
 			const stem = this.#generateUnfiltered()
@@ -259,24 +262,29 @@ export class Stem
 			if (!rejectionFilter)
 			{
 				if (!callback) return stem
-				const r = callback(stem)
+				const r = callback(stem,
+					filterRejectionCount,
+					callbackRejectionCount)
 				if (r === null)
 					return stem
 				if (r === false)
-					rejectionCount++
+					callbackRejectionCount++
 				else
-					rejectionCount = 0
+				{
+					filterRejectionCount = 0
+					callbackRejectionCount = 0
+				}
 			}
 			else
 			{
-				rejectionCount++
+				filterRejectionCount++
 				if (rejectionCallback)
 				{
 					rejectionCallback(stem, rejectionFilter)
 				}
 			}
 		}
-		while (rejectionCount < this.rejectionLimit)
+		while (filterRejectionCount+callbackRejectionCount < this.rejectionLimit)
 		throw "Too many rejected stems."
 	}
 }
